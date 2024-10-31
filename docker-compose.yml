@@ -1,0 +1,7 @@
+services:
+  app:
+    image: ${IMAGE_REPOSITORY}:${IMAGE_TAG}
+    container_name: reactjs-ecommerce-app
+    ports:
+      - 80:80
+

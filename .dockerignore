@@ -1,0 +1,18 @@
+# Node dependencies (typically installed within the container)
+node_modules/
+
+# Local development and test directories
+build/
+dist/
+
+# Environment files (environment variables should be set in Docker)
+.env
+.env.*
+
+# Git and version control directories
+.git
+.gitignore
+
+# Miscellaneous
+.vscode/
+
