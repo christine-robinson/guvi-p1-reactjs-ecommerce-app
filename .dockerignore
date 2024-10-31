@@ -2,7 +2,7 @@
 node_modules/
 
 # Local development and test directories
-build/
+# build/
 dist/
 
 # Environment files (environment variables should be set in Docker)
