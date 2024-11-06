@@ -47,7 +47,9 @@ pipeline {
             }
         }
         stage('Deploy') {
-            agent "${env.ENV}-server"
+            agent {
+                label "${env.ENV}-server"
+            }
 
             options {
                 skipDefaultCheckout true
