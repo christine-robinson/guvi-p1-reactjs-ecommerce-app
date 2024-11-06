@@ -47,6 +47,13 @@ pipeline {
                     sh './build.sh $IMAGE_REPO $IMAGE_TAG'
                 }
             }
+
+            post {
+                always {
+                    // CleanUp
+                    sh 'docker system prune -af'
+                }
+            }
         }
         stage('Deploy') {
             agent {
