@@ -1,7 +1,7 @@
 services:
   app:
-    image: ${IMAGE_REPO}:${IMAGE_TAG}
-    container_name: guvi-p1-${ENV}-reactjs-ecommerce-app
+    image: "${IMAGE_REPO}:${IMAGE_TAG}"
+    container_name: "guvi-p1-${ENV}-reactjs-ecommerce-app"
     env_file:
       - .env
     ports:
