@@ -29,10 +29,9 @@ pipeline {
                     def fileName = '.env'
 
                     def fileContent = "ENV=${env.ENV} \n"
-                    fileContent += "IMAGE_REPO=${env.IMAGE_REPO} \n"
-                    fileContent += "IMAGE_TAG=${env.IMAGE_TAG} \n"
+                    fileContent += "DOCKER_IMAGE=${env.IMAGE_REPO}:${env.IMAGE_TAG} \n"
 
-                    writeFile file: fileName, text: fileContent
+                    writeFile (file: fileName, text: fileContent)
                 }
 
                 // Executable permission for script files
@@ -44,7 +43,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                withCredentials([string(credentialsId: 'docker-password', variable: 'DOCKER_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker-login-creds', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                     sh './build.sh $IMAGE_REPO $IMAGE_TAG'
                 }
             }
@@ -61,7 +60,7 @@ pipeline {
             steps {
                 unstash 'deploy'
 
-                withCredentials([string(credentialsId: 'docker-password', variable: 'DOCKER_PASSWORD')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker-login-creds', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                     sh './deploy.sh'
                 }
             }
