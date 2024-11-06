@@ -35,6 +35,9 @@ pipeline {
                     writeFile file: fileName, text: fileContent
                 }
 
+                // Executable permission for script files
+                sh 'chmod +x *.sh'
+
                 // Stash required files to deploy
                 stash (name: 'deploy', includes: 'deploy.sh, docker-compose.yml, .env')
             }
