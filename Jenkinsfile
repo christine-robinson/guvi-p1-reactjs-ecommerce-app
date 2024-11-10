@@ -38,7 +38,7 @@ pipeline {
                 sh 'chmod +x *.sh'
 
                 // Stash required files to deploy
-                stash (name: 'deploy', includes: 'deploy.sh, docker-compose.yml, .env, monitoring')
+                stash (name: 'deploy', includes: 'deploy.sh, docker-compose.yml, .env, monitoring/**/*')
             }
         }
         stage('Build') {
