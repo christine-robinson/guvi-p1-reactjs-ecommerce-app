@@ -58,6 +58,7 @@ pipeline {
             }
 
             steps {
+                cleanWs()
                 unstash 'deploy'
 
                 withCredentials([usernamePassword(credentialsId: 'docker-login-creds', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
