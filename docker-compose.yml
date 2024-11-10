@@ -1,8 +1,50 @@
 services:
-  app:
+  nginx:
     image: ${DOCKER_IMAGE}
     container_name: guvi-p1-${ENV}-reactjs-ecommerce-app
     env_file:
       - .env
     ports:
       - 80:80
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    container_name: nginx-exporter
+    command:
+      - --nginx.scrape-uri=http://nginx/stub_status
+    depends_on:
+      - nginx
+    ports:
+      - 9113:9113
+
+  alertmanager:
+    image: prom/alertmanager:latest
+    container_name: alertmanager
+    depends_on:
+      - nginx-exporter
+    ports:
+      - 9093:9093
+    volumes:
+      - ./monitoring/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    depends_on:
+      - alertmanager
+    ports:
+      - 9090:9090
+    volumes:
+      - ./monitoring/prometheus/:/etc/prometheus/:ro
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    depends_on:
+      - prometheus
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports:
+      - 3000:3000
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning/:ro

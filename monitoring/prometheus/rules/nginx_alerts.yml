@@ -1,0 +1,29 @@
+groups:
+  - name: nginx_alerts
+    rules:
+      - alert: NginxDown
+        expr: nginx_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Nginx is down"
+          description: "Nginx has been down for more than 1 minute"
+
+      - alert: HighHTTPErrors
+        expr: rate(nginx_http_requests_total{status=~"^5.*"}[5m]) > 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High HTTP 5xx error rate"
+          description: "High rate of 5xx errors in the last 5 minutes"
+
+      - alert: HighActiveConnections
+        expr: nginx_connections_active > 1000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of active connections"
+          description: "More than 1000 active connections for 5 minutes"

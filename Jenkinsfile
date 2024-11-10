@@ -38,20 +38,13 @@ pipeline {
                 sh 'chmod +x *.sh'
 
                 // Stash required files to deploy
-                stash (name: 'deploy', includes: 'deploy.sh, docker-compose.yml, .env')
+                stash (name: 'deploy', includes: 'deploy.sh, docker-compose.yml, .env, monitoring')
             }
         }
         stage('Build') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-login-creds', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                     sh './build.sh $IMAGE_REPO $IMAGE_TAG'
-                }
-            }
-
-            post {
-                always {
-                    // CleanUp
-                    sh 'docker system prune -af'
                 }
             }
         }
